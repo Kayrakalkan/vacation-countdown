@@ -31,7 +31,7 @@ def main():
     print(f"API Key: {'*' * 20} (hidden)")
     
     # Add random delay (0-60 seconds) to make reminder time random each day
-    delay_seconds = random.randint(0, 60)  # 0 to 60 seconds
+    delay_seconds = random.randint(0, 3600)  # 0 to 60 seconds
     delay_minutes = delay_seconds / 60
     
     print(f"Waiting {delay_minutes:.1f} minutes before sending reminder...")
