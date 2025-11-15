@@ -6,6 +6,15 @@ from datetime import datetime
 DATA_DIR = os.environ.get('DATA_DIR', '.')
 DATABASE_NAME = os.path.join(DATA_DIR, 'vacations.db')
 
+# Debug: Print database location on startup
+print(f"[DATABASE] Using DATA_DIR: {DATA_DIR}")
+print(f"[DATABASE] Database location: {DATABASE_NAME}")
+print(f"[DATABASE] Database exists: {os.path.exists(DATABASE_NAME)}")
+if os.path.exists(DATA_DIR):
+    print(f"[DATABASE] DATA_DIR is writable: {os.access(DATA_DIR, os.W_OK)}")
+else:
+    print(f"[DATABASE] WARNING: DATA_DIR does not exist!")
+
 def get_db_connection():
     """Create a database connection."""
     conn = sqlite3.connect(DATABASE_NAME)
@@ -14,6 +23,8 @@ def get_db_connection():
 
 def init_db():
     """Initialize the database with the vacations table."""
+    print(f"[INIT_DB] Creating/checking database at: {DATABASE_NAME}")
+    
     conn = get_db_connection()
     cursor = conn.cursor()
     
@@ -30,6 +41,11 @@ def init_db():
     ''')
     
     conn.commit()
+    
+    # Check how many vacations exist
+    count = cursor.execute('SELECT COUNT(*) FROM vacations').fetchone()[0]
+    print(f"[INIT_DB] Database initialized! Current vacation count: {count}")
+    
     conn.close()
     print("Database initialized successfully!")
 

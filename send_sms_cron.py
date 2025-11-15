@@ -11,6 +11,15 @@ import time as time_module
 # Add the project root to the path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+# Print environment info for debugging
+print("=" * 60)
+print("CRON JOB ENVIRONMENT DEBUG INFO")
+print("=" * 60)
+print(f"DATA_DIR env var: {os.environ.get('DATA_DIR', 'NOT SET')}")
+print(f"Current working directory: {os.getcwd()}")
+print(f"Script location: {os.path.dirname(os.path.abspath(__file__))}")
+print("=" * 60)
+
 from sms_service import send_vacation_reminder, MESSAGE_TYPE
 
 def main():
