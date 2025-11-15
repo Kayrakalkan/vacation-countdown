@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Notes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏖️ Vacation Countdown</h1>
+            <nav>
+                <a href="{{ url_for('index') }}">Home</a>
+                <a href="{{ url_for('add') }}">Add Vacation</a>
+                <a href="{{ url_for('list_vacations') }}">All Vacations</a>
+            </nav>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <main>
+            <div class="form-card">
+                <h2>Edit Notes: {{ vacation.location }}</h2>
+                <p class="subtitle">{{ vacation.start_date|format_date }}</p>
+                
+                <form method="POST" action="{{ url_for('edit_notes', vacation_id=vacation.id) }}">
+                    <div class="form-group">
+                        <label for="notes">Planning Notes</label>
+                        <textarea id="notes" name="notes" rows="10" 
+                                  placeholder="Add any planning notes, to-do items, or reminders...">{{ vacation.notes }}</textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Save Notes</button>
+                        <a href="{{ url_for('list_vacations') }}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <footer>
+            <p>Keep track of your plans! 📝</p>
+        </footer>
+    </div>
+</body>
+</html>

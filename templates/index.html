@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vacation Countdown</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏖️ Vacation Countdown</h1>
+            <nav>
+                <a href="{{ url_for('index') }}">Home</a>
+                <a href="{{ url_for('add') }}">Add Vacation</a>
+                <a href="{{ url_for('list_vacations') }}">All Vacations</a>
+            </nav>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <main>
+            {% if vacation %}
+                <div class="countdown-card">
+                    <div class="destination">{{ vacation.location }}</div>
+                    
+                    {% if days_remaining is not none %}
+                        {% if days_remaining > 0 %}
+                            <div class="countdown">
+                                <div class="days-number">{{ days_remaining }}</div>
+                                <div class="days-text">day{% if days_remaining != 1 %}s{% endif %} remaining</div>
+                            </div>
+                        {% elif days_remaining == 0 %}
+                            <div class="countdown">
+                                <div class="days-number">🎉</div>
+                                <div class="days-text">Today is the day!</div>
+                            </div>
+                        {% else %}
+                            <div class="countdown">
+                                <div class="days-number">⏰</div>
+                                <div class="days-text">This vacation has passed</div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                    
+                    <div class="vacation-date">
+                        Starting: {{ vacation.start_date|format_date }}
+                    </div>
+                    
+                    {% if vacation.notes %}
+                        <div class="notes-section">
+                            <h3>Planning Notes:</h3>
+                            <p>{{ vacation.notes }}</p>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="action-buttons">
+                        <a href="{{ url_for('edit_notes', vacation_id=vacation.id) }}" class="btn btn-secondary">Edit Notes</a>
+                    </div>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <h2>No Active Vacation</h2>
+                    <p>You haven't set an active vacation yet!</p>
+                    <a href="{{ url_for('add') }}" class="btn btn-primary">Add Your First Vacation</a>
+                    <p style="margin-top: 20px;">or</p>
+                    <a href="{{ url_for('list_vacations') }}" class="btn btn-secondary">View All Vacations</a>
+                </div>
+            {% endif %}
+        </main>
+
+        <footer>
+            <p>Stay excited about your upcoming adventures! ✈️</p>
+        </footer>
+    </div>
+</body>
+</html>

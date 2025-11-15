@@ -1,0 +1,43 @@
+services:
+  # Web Service - Main Flask Application
+  - type: web
+    name: vacation-countdown
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_PHONE_NUMBER
+        sync: false
+      - key: TO_PHONE_NUMBER
+        sync: false
+      - key: APP_URL
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+    
+  # Cron Job - Daily SMS Reminders
+  - type: cron
+    name: vacation-sms-reminder
+    env: python
+    schedule: "0 10 * * *"  # Runs daily at 10 AM (script adds random delay)
+    buildCommand: pip install -r requirements.txt
+    startCommand: python send_sms_cron.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_PHONE_NUMBER
+        sync: false
+      - key: TO_PHONE_NUMBER
+        sync: false
+      - key: APP_URL
+        sync: false

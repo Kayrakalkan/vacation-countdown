@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Vacation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏖️ Vacation Countdown</h1>
+            <nav>
+                <a href="{{ url_for('index') }}">Home</a>
+                <a href="{{ url_for('add') }}" class="active">Add Vacation</a>
+                <a href="{{ url_for('list_vacations') }}">All Vacations</a>
+            </nav>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <main>
+            <div class="form-card">
+                <h2>Add New Vacation</h2>
+                <form method="POST" action="{{ url_for('add') }}">
+                    <div class="form-group">
+                        <label for="location">Destination *</label>
+                        <input type="text" id="location" name="location" required 
+                               placeholder="e.g., Paris, Bali, Tokyo">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="start_date">Start Date *</label>
+                        <input type="date" id="start_date" name="start_date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Planning Notes</label>
+                        <textarea id="notes" name="notes" rows="5" 
+                                  placeholder="Add any planning notes, to-do items, or reminders..."></textarea>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label>
+                            <input type="checkbox" name="is_active">
+                            Set as active vacation (for countdown display)
+                        </label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Add Vacation</button>
+                        <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <footer>
+            <p>Plan your next adventure! 🌍</p>
+        </footer>
+    </div>
+</body>
+</html>
