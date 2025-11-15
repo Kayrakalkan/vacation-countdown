@@ -16,10 +16,18 @@ services:
         sync: false
       - key: TO_PHONE_NUMBER
         sync: false
+      - key: MESSAGE_TYPE
+        value: whatsapp
+      - key: DATA_DIR
+        value: /data
       - key: APP_URL
         sync: false
       - key: SECRET_KEY
         generateValue: true
+    disk:
+      name: vacation-data
+      mountPath: /data
+      sizeGB: 1
     
   # Cron Job - Daily SMS Reminders
   - type: cron
@@ -39,5 +47,13 @@ services:
         sync: false
       - key: TO_PHONE_NUMBER
         sync: false
+      - key: MESSAGE_TYPE
+        value: whatsapp
+      - key: DATA_DIR
+        value: /data
       - key: APP_URL
         sync: false
+    disk:
+      name: vacation-data
+      mountPath: /data
+      sizeGB: 1
