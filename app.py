@@ -107,6 +107,26 @@ def delete(vacation_id):
     
     return redirect(url_for('list_vacations'))
 
+@app.route('/api/send-reminder', methods=['POST'])
+def api_send_reminder():
+    """API endpoint for cron job to trigger WhatsApp reminder."""
+    # Simple API key check for security
+    api_key = request.headers.get('X-API-Key') or request.args.get('api_key')
+    expected_key = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
+    
+    if api_key != expected_key:
+        return {'error': 'Unauthorized'}, 401
+    
+    # Import here to avoid circular import
+    from sms_service import send_vacation_reminder
+    
+    success = send_vacation_reminder()
+    
+    if success:
+        return {'status': 'success', 'message': 'Reminder sent successfully'}, 200
+    else:
+        return {'status': 'warning', 'message': 'No active vacation or failed to send'}, 200
+
 @app.template_filter('format_date')
 def format_date(date_str):
     """Format date for display."""

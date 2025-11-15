@@ -29,31 +29,17 @@ services:
       mountPath: /data
       sizeGB: 1
     
-  # Cron Job - Daily SMS Reminders
+  # Cron Job - Daily WhatsApp Reminders (via API)
   - type: cron
     name: vacation-sms-reminder
     env: python
     schedule: "0 10 * * *"  # Runs daily at 10 AM (script adds random delay)
     buildCommand: pip install -r requirements.txt
-    startCommand: python send_sms_cron.py
+    startCommand: python send_reminder_api.py
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
-      - key: TWILIO_ACCOUNT_SID
-        sync: false
-      - key: TWILIO_AUTH_TOKEN
-        sync: false
-      - key: TWILIO_PHONE_NUMBER
-        sync: false
-      - key: TO_PHONE_NUMBER
-        sync: false
-      - key: MESSAGE_TYPE
-        value: whatsapp
-      - key: DATA_DIR
-        value: /data
       - key: APP_URL
         sync: false
-    disk:
-      name: vacation-data
-      mountPath: /data
-      sizeGB: 1
+      - key: SECRET_KEY
+        sync: false
