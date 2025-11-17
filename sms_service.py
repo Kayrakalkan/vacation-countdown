@@ -41,7 +41,8 @@ def send_vacation_reminder():
         return False
     
     # Get vacation notes if available
-    notes = vacation.get('notes', '').strip()
+    notes = vacation['notes'] if vacation['notes'] else ''
+    notes = notes.strip()
     notes_section = f"\n\n*Notes:* {notes}" if notes else ""
     
     # Create message based on days remaining
