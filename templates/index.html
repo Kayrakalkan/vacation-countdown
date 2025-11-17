@@ -5,6 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vacation Countdown</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        // Real-time countdown with days, hours, minutes, seconds
+        function updateCountdown() {
+            const vacationDate = "{{ vacation.start_date if vacation else '' }}";
+            if (!vacationDate) return;
+            
+            const targetDate = new Date(vacationDate + "T00:00:00").getTime();
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+            
+            if (distance < 0) {
+                document.getElementById('countdown-display').innerHTML = '<div class="time-passed">🎉 Vacation Time!</div>';
+                return;
+            }
+            
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            document.getElementById('countdown-display').innerHTML = `
+                <div class="time-units">
+                    <div class="time-unit">
+                        <div class="time-number">${days}</div>
+                        <div class="time-label">Days</div>
+                    </div>
+                    <div class="time-unit">
+                        <div class="time-number">${hours}</div>
+                        <div class="time-label">Hours</div>
+                    </div>
+                    <div class="time-unit">
+                        <div class="time-number">${minutes}</div>
+                        <div class="time-label">Minutes</div>
+                    </div>
+                    <div class="time-unit">
+                        <div class="time-number">${seconds}</div>
+                        <div class="time-label">Seconds</div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Update every second
+        {% if vacation %}
+        setInterval(updateCountdown, 1000);
+        window.onload = updateCountdown;
+        {% endif %}
+    </script>
 </head>
 <body>
     <div class="container">
@@ -30,24 +78,10 @@
                 <div class="countdown-card">
                     <div class="destination">{{ vacation.location }}</div>
                     
-                    {% if days_remaining is not none %}
-                        {% if days_remaining > 0 %}
-                            <div class="countdown">
-                                <div class="days-number">{{ days_remaining }}</div>
-                                <div class="days-text">day{% if days_remaining != 1 %}s{% endif %} remaining</div>
-                            </div>
-                        {% elif days_remaining == 0 %}
-                            <div class="countdown">
-                                <div class="days-number">🎉</div>
-                                <div class="days-text">Today is the day!</div>
-                            </div>
-                        {% else %}
-                            <div class="countdown">
-                                <div class="days-number">⏰</div>
-                                <div class="days-text">This vacation has passed</div>
-                            </div>
-                        {% endif %}
-                    {% endif %}
+                    <div id="countdown-display" class="countdown">
+                        <!-- JavaScript will update this -->
+                        <div class="loading">Loading countdown...</div>
+                    </div>
                     
                     <div class="vacation-date">
                         Starting: {{ vacation.start_date|format_date }}

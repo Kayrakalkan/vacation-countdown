@@ -113,6 +113,53 @@ main {
     margin: 40px 0;
 }
 
+.time-units {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.time-unit {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px;
+    border-radius: 15px;
+    min-width: 100px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.time-number {
+    font-size: 48px;
+    font-weight: bold;
+    color: white;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.time-label {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.time-passed {
+    font-size: 48px;
+    font-weight: bold;
+    color: var(--success-color);
+    animation: celebrate 1s ease-in-out infinite alternate;
+}
+
+@keyframes celebrate {
+    from { transform: scale(1); }
+    to { transform: scale(1.05); }
+}
+
+.loading {
+    font-size: 18px;
+    color: var(--text-light);
+}
+
 .days-number {
     font-size: 80px;
     font-weight: bold;

@@ -40,25 +40,30 @@ def send_vacation_reminder():
         print("Error calculating days remaining.")
         return False
     
+    # Get vacation notes if available
+    notes = vacation.get('notes', '').strip()
+    notes_section = f"\n\n*Notes:* {notes}" if notes else ""
+    
     # Create message based on days remaining
     if days_remaining > 0:
         if MESSAGE_TYPE == 'whatsapp':
             # WhatsApp supports rich formatting and emojis
             message = f"""🏖️ *Vacation Countdown* 🏖️
 
-Only *{days_remaining} day{'s' if days_remaining != 1 else ''}* left until your vacation to *{vacation['location']}*! ✈️
+Only *{days_remaining} day{'s' if days_remaining != 1 else ''}* left until your vacation to *{vacation['location']}*! ✈️{notes_section}
 
 Get ready for an amazing time! 🎉
 
 {APP_URL}"""
         else:
             # SMS - simpler message
-            message = f"Only {days_remaining} day{'s' if days_remaining != 1 else ''} left until {vacation['location']}! 🏖️ {APP_URL}"
+            notes_text = f" - {notes}" if notes else ""
+            message = f"Only {days_remaining} day{'s' if days_remaining != 1 else ''} left until {vacation['location']}!{notes_text} 🏖️ {APP_URL}"
     elif days_remaining == 0:
         if MESSAGE_TYPE == 'whatsapp':
             message = f"""🎉 *TODAY IS THE DAY!* 🎉
 
-Your vacation to *{vacation['location']}* starts TODAY!
+Your vacation to *{vacation['location']}* starts TODAY!{notes_section}
 
 Have an absolutely amazing time! 🌴✨
 
