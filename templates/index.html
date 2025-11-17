@@ -8,7 +8,10 @@
     <script>
         // Real-time countdown with days, hours, minutes, seconds
         function updateCountdown() {
-            const vacationDate = "{{ vacation.start_date if vacation else '' }}";
+            const vacationDateElement = document.getElementById('vacation-date-data');
+            if (!vacationDateElement) return;
+            
+            const vacationDate = vacationDateElement.dataset.date;
             if (!vacationDate) return;
             
             const targetDate = new Date(vacationDate + "T00:00:00").getTime();
@@ -47,11 +50,13 @@
             `;
         }
         
-        // Update every second
-        {% if vacation %}
-        setInterval(updateCountdown, 1000);
-        window.onload = updateCountdown;
-        {% endif %}
+        // Start countdown when page loads
+        window.addEventListener('DOMContentLoaded', function() {
+            if (document.getElementById('vacation-date-data')) {
+                updateCountdown();
+                setInterval(updateCountdown, 1000);
+            }
+        });
     </script>
 </head>
 <body>
@@ -76,6 +81,9 @@
         <main>
             {% if vacation %}
                 <div class="countdown-card">
+                    <!-- Hidden data attribute for JavaScript -->
+                    <div id="vacation-date-data" data-date="{{ vacation.start_date }}" style="display: none;"></div>
+                    
                     <div class="destination">{{ vacation.location }}</div>
                     
                     <div id="countdown-display" class="countdown">
